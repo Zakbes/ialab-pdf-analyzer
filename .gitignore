@@ -1,0 +1,16 @@
+# secrets
+.env
+*.env
+
+# python
+**/__pycache__/
+**/*.pyc
+backend/.venv/
+
+# angular
+pdf-analyzer-ui/node_modules/
+pdf-analyzer-ui/dist/
+
+# misc
+.vscode/
+.DS_Store

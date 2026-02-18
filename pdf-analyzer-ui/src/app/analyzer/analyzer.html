@@ -1,0 +1,89 @@
+<div class="wrapper">
+  <div class="container">
+    <h1>PDF Analyzer</h1>
+
+    <div
+      class="upload-container"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+      [class.dragover]="isDragOver"
+    >
+      <div class="border-container">
+        <div class="icons fa-4x">
+          <i class="fas fa-file-image"></i>
+          <i class="fas fa-file-alt"></i>
+          <i class="fas fa-file-pdf"></i>
+        </div>
+
+        <input
+          type="file"
+          #fileInput
+          accept="application/pdf"
+          style="display: none"
+          (change)="onFileSelected($event)"
+        />
+
+        <p>
+          Drag and drop a PDF here, or
+          <a href="#" class="file-browser" (click)="openFileBrowser($event, fileInput)">browse</a>
+          your computer.
+        </p>
+
+        <div *ngIf="selectedFile" class="file-info">
+          <strong>{{ selectedFile.name }}</strong>
+          <span class="muted"> — {{ selectedFile.size }} bytes</span>
+          <button class="btn-remove" (click)="reset()">Remove</button>
+        </div>
+
+        <div class="actions">
+          <button class="btn-primary" (click)="process()" [disabled]="!selectedFile || loading">
+            <span *ngIf="!loading">Analyser le document</span>
+            <span *ngIf="loading">Analyse...</span>
+          </button>
+        </div>
+
+        <div *ngIf="loading" class="loader">
+          <div class="spinner"></div>
+          <span class="muted">Traitement en cours...</span>
+        </div>
+
+        <div *ngIf="errorMsg" class="error">
+          {{ errorMsg }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Résultat structuré -->
+    <div *ngIf="result" class="result">
+      <h2>{{ result.analysis.titre }}</h2>
+
+      <div class="meta-row">
+        <span class="pill">
+          <strong>Type</strong> : {{ result.analysis.type_document }}
+        </span>
+        <span class="pill">
+          <strong>Langue</strong> : {{ result.analysis.langue }}
+        </span>
+        <span class="pill">
+          <strong>OCR</strong> : {{ result.ocr_used ? 'Oui' : 'Non' }}
+        </span>
+        <span class="pill">
+          <strong>Chars</strong> : {{ result.chars }}
+        </span>
+      </div>
+
+      <div class="card">
+        <h3>Résumé</h3>
+        <p class="resume">{{ result.analysis.resume }}</p>
+      </div>
+
+      <div class="card">
+        <h3>Mots-clés</h3>
+        <div class="tags">
+        <span class="tag" *ngFor="let kw of result.analysis.mots_cles">{{ kw }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
